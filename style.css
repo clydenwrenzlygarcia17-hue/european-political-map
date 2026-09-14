@@ -934,7 +934,7 @@ body {
     left:
       3vw;
     top:
-      8vh;
+      3vh;
     width:
       94vw;
     transform:
@@ -945,7 +945,7 @@ body {
     top:
       auto;
     bottom:
-      3vh;
+      2vh;
     left:
       3vw;
     right:
@@ -957,10 +957,11 @@ body {
     min-width:
       0;
     max-height:
-      45vh;
+      42vh;
     transform:
       none;
   }
+
 
   @keyframes mapPanelIn {
     from {
@@ -1173,7 +1174,7 @@ body {
       rgba(15, 20, 25, 0.68),
       rgba(15, 20, 25, 0.68)
     ),
-    url("basis.png") center / cover no-repeat;
+    url("assets/basis.png") center / cover no-repeat;
 
   filter: blur(16px);
 
@@ -1522,3 +1523,4 @@ body {
     width: 70px;
   }
 }
+
