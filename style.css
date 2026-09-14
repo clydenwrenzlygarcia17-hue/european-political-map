@@ -1,0 +1,1526 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --paper: #eef2f4;
+  --paper-edge: #d7dee2;
+  --ink: #2b2b28;
+  --rust: #8a3f14;
+  --gold: #cfa13a;
+  --c-blue: #1ea0e6;
+  --c-red: #c85028;
+  --c-green: #2a6e2a;
+  --c-violet: #6e1496;
+  --c-yellow: #e0a028;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family:
+    'Inter',
+    system-ui,
+    sans-serif;
+}
+
+body {
+  background-image:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(255,255,255,.5),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 85% 90%,
+      rgba(255,255,255,.4),
+      transparent 45%
+    );
+}
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding:
+    28px 20px 60px;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.site-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding:
+    6px 0 18px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+}
+
+.header-img {
+  height: 110px;
+  width: auto;
+  display: block;
+  transition:
+    transform .2s ease,
+    filter .2s ease;
+}
+
+.site-header:hover .header-img,
+.site-header:focus-visible .header-img {
+  transform:
+    translateY(-2px);
+  filter:
+    brightness(1.08);
+}
+
+.header-hint {
+  font-family:
+    'Caveat',
+    cursive;
+  font-size:
+    1.05rem;
+  color:
+    var(--rust);
+  opacity:
+    .75;
+}
+
+/* =========================================================
+   MAP SHELL
+   ========================================================= */
+
+.map-shell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.map-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio:
+    2200 / 1555;
+  border-radius:
+    var(--radius);
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 18px 40px -22px
+    rgba(30,30,25,.45),
+    0 2px 0
+    rgba(0,0,0,.03);
+  border:
+    1px solid var(--paper-edge);
+}
+
+/* =========================================================
+   BASIS IMAGE
+   ========================================================= */
+
+.basis-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+/* =========================================================
+   MAP MODE IMAGE
+   ========================================================= */
+
+.map-mode-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+/* Show the separate map only in Map Mode */
+.page.map-mode-active .map-mode-img {
+  opacity: 1;
+}
+
+/* =========================================================
+   GLOW
+   ========================================================= */
+
+.glow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: multiply;
+  filter:
+    drop-shadow(
+      0 0 18px currentColor
+    );
+  transition:
+    opacity .35s ease;
+}
+
+.glow.is-active {
+  opacity: .9;
+  animation:
+    pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    filter:
+      drop-shadow(
+        0 0 10px rgba(0,0,0,.15)
+      );
+  }
+
+  50% {
+    filter:
+      drop-shadow(
+        0 0 26px rgba(0,0,0,.28)
+      );
+  }
+}
+
+/* =========================================================
+   MAP CLICK LAYER
+   ========================================================= */
+
+.hit-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background:
+    transparent;
+  cursor:
+    pointer;
+  z-index: 5;
+}
+
+.hit-layer:focus-visible {
+  outline:
+    3px solid var(--gold);
+  outline-offset:
+    -3px;
+}
+
+/* =========================================================
+   COUNTRY INTERACTION
+   ========================================================= */
+
+.country-layer {
+  position: absolute;
+
+  /*
+     ICELAND POSITION
+     The Iceland PNG contains transparent
+     space around the actual country drawing.
+  */
+
+  left: 22.9%;
+  top: 8.4%;
+
+  /*
+     ICELAND SIZE
+  */
+
+  width: 9.1%;
+  height: 23.9%;
+
+  object-fit: fill;
+
+  /*
+     Keep Iceland above the map click layer.
+  */
+
+  z-index: 6;
+
+  /*
+     Hidden on the normal homepage.
+  */
+
+  opacity: 0;
+  pointer-events: none;
+
+  cursor: pointer;
+
+  transition:
+    opacity .3s ease,
+    transform .2s ease,
+    filter .2s ease;
+}
+
+/* =========================================================
+   ICELAND — MAP MODE ONLY
+   ========================================================= */
+
+.page.map-mode-active .country-layer {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   ICELAND HOVER
+   ========================================================= */
+
+.page.map-mode-active .country-layer:hover {
+  transform: scale(1.05);
+  filter:
+    drop-shadow(
+      0 0 10px rgba(42,110,42,.65)
+    );
+}
+
+/* =========================================================
+   LEGEND HOTSPOTS
+   ========================================================= */
+
+.legend-hotspots {
+  position: absolute;
+  inset: 0;
+  pointer-events:
+    none;
+  z-index: 10;
+}
+
+.legend-dot {
+  position: absolute;
+  transform:
+    translate(-50%,-50%);
+  width:
+    5.6%;
+  aspect-ratio:
+    1;
+  border-radius:
+    50%;
+  border:
+    2px solid transparent;
+  background:
+    transparent;
+  cursor:
+    pointer;
+  pointer-events:
+    all;
+  padding:
+    0;
+  transition:
+    box-shadow .2s ease,
+    border-color .2s ease,
+    background .2s ease;
+}
+
+.legend-dot:hover,
+.legend-dot:focus-visible {
+  background:
+    rgba(255,255,255,.35);
+  border-color:
+    rgba(255,255,255,.6);
+}
+
+.legend-dot.is-active {
+  border-color:
+    #fff;
+  box-shadow:
+    0 0 0 3px currentColor,
+    0 0 16px 4px currentColor;
+}
+
+.legend-tip {
+  position: absolute;
+  left:
+    calc(100% + 10px);
+  top:
+    50%;
+  transform:
+    translateY(-50%)
+    translateX(-6px);
+  height:
+    34px;
+  width:
+    auto;
+  pointer-events:
+    none;
+  opacity:
+    0;
+  filter:
+    drop-shadow(
+      0 4px 10px rgba(0,0,0,.25)
+    );
+  transition:
+    opacity .15s ease,
+    transform .15s ease;
+  background:
+    rgba(255,253,249,.9);
+  border-radius:
+    8px;
+  padding:
+    3px 8px 3px 3px;
+}
+
+.legend-dot:hover .legend-tip,
+.legend-dot:focus-visible .legend-tip {
+  opacity:
+    1;
+  transform:
+    translateY(-50%)
+    translateX(0);
+}
+
+/* =========================================================
+   CAPTION
+   ========================================================= */
+
+.map-caption {
+  font-size:
+    .92rem;
+  color:
+    #55564f;
+  text-align:
+    center;
+  max-width:
+    46ch;
+  margin:
+    0;
+}
+
+/* =========================================================
+   OLD EXPLAINER PANEL
+   ========================================================= */
+
+.overlay-scrim {
+  position:
+    fixed;
+  inset:
+    0;
+  background:
+    rgba(20,18,14,.38);
+  backdrop-filter:
+    blur(2px);
+  z-index:
+    40;
+  animation:
+    fadeIn .2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.explainer {
+  position:
+    fixed;
+  top:
+    50%;
+  left:
+    50%;
+  transform:
+    translate(-50%,-50%)
+    scale(.96);
+  width:
+    min(480px, 92vw);
+  max-height:
+    80vh;
+  overflow-y:
+    auto;
+  background:
+    #fffdf9;
+  border-radius:
+    var(--radius);
+  border:
+    1px solid var(--paper-edge);
+  box-shadow:
+    0 30px 60px -20px
+    rgba(0,0,0,.5);
+  z-index:
+    41;
+  animation:
+    pop .22s
+    cubic-bezier(.2,.9,.3,1.2)
+    forwards;
+}
+
+@keyframes pop {
+  from {
+    opacity:
+      0;
+    transform:
+      translate(-50%,-50%)
+      scale(.94);
+  }
+
+  to {
+    opacity:
+      1;
+    transform:
+      translate(-50%,-50%)
+      scale(1);
+  }
+}
+
+.explainer-head {
+  display:
+    flex;
+  align-items:
+    center;
+  gap:
+    10px;
+  padding:
+    16px 16px 12px 18px;
+  border-bottom:
+    1px solid var(--paper-edge);
+  position:
+    sticky;
+  top:
+    0;
+  background:
+    #fffdf9;
+}
+
+.explainer-dot {
+  width:
+    16px;
+  height:
+    16px;
+  border-radius:
+    50%;
+  flex:
+    none;
+  background:
+    var(--c-blue);
+}
+
+.explainer-head h2 {
+  margin:
+    0;
+  font-family:
+    'Caveat',
+    cursive;
+  font-weight:
+    700;
+  font-size:
+    1.6rem;
+  color:
+    var(--ink);
+  flex:
+    1;
+}
+
+.explainer-close {
+  border:
+    none;
+  background:
+    none;
+  font-size:
+    1.1rem;
+  cursor:
+    pointer;
+  color:
+    #8a8a80;
+  padding:
+    4px 6px;
+  border-radius:
+    6px;
+}
+
+.explainer-close:hover {
+  background:
+    #f0ece2;
+  color:
+    var(--ink);
+}
+
+.explainer-body {
+  padding:
+    18px;
+  min-height:
+    140px;
+  font-size:
+    .96rem;
+  line-height:
+    1.55;
+  color:
+    #2b2b28;
+}
+
+.explainer-body:empty::before,
+.explainer-placeholder {
+  content:
+    "";
+  display:
+    block;
+  height:
+    96px;
+  border-radius:
+    10px;
+  background:
+    #111;
+}
+
+/* =========================================================
+   STAGE 1 — MAP MODE
+   ========================================================= */
+
+.page.map-mode-active > *:not(.map-shell):not(.map-mode-panel) {
+  filter: blur(4px);
+  opacity: .45;
+  transition:
+    filter .35s ease,
+    opacity .35s ease;
+}
+
+.page.map-mode-active .map-caption {
+  filter:
+    blur(4px);
+  opacity:
+    .35;
+}
+
+.page.map-mode-active .map-frame {
+  position:
+    fixed;
+  z-index:
+    101;
+  left:
+    3vw;
+  top:
+    50%;
+  width:
+    61vw;
+  max-width:
+    none;
+  transform:
+    translateY(-50%);
+  box-shadow:
+    0 30px 70px -25px
+    rgba(0,0,0,.55);
+  transition:
+    left .55s cubic-bezier(.2,.8,.2,1),
+    width .55s cubic-bezier(.2,.8,.2,1),
+    transform .55s cubic-bezier(.2,.8,.2,1);
+}
+
+.page.map-mode-active::before {
+  content:
+    "";
+  position:
+    fixed;
+  inset:
+    0;
+  background:
+    rgba(20,18,14,.48);
+  backdrop-filter:
+    blur(3px);
+  z-index:
+    90;
+  pointer-events:
+    none;
+}
+
+.page.map-mode-active .map-shell {
+  position:
+    static;
+}
+
+/* =========================================================
+   MAP MODE INFORMATION PANEL
+   ========================================================= */
+
+.map-mode-panel {
+  position:
+    fixed;
+  z-index:
+    110;
+  top:
+    50%;
+  right:
+    3vw;
+  width:
+    31vw;
+  max-width:
+    470px;
+  min-width:
+    300px;
+  max-height:
+    78vh;
+  transform:
+    translateY(-50%);
+  background:
+    #fffdf9;
+  border:
+    1px solid var(--paper-edge);
+  border-radius:
+    var(--radius);
+  box-shadow:
+    0 30px 70px -25px
+    rgba(0,0,0,.55);
+  overflow:
+    hidden;
+  animation:
+    mapPanelIn .4s
+    cubic-bezier(.2,.9,.3,1.15);
+}
+
+@keyframes mapPanelIn {
+  from {
+    opacity:
+      0;
+    transform:
+      translateY(-50%)
+      translateX(35px);
+  }
+
+  to {
+    opacity:
+      1;
+    transform:
+      translateY(-50%)
+      translateX(0);
+  }
+}
+
+/* =========================================================
+   MAP MODE HEADER
+   ========================================================= */
+
+.map-mode-head {
+  display:
+    flex;
+  align-items:
+    center;
+  gap:
+    12px;
+  padding:
+    18px 18px 15px;
+  border-bottom:
+    1px solid var(--paper-edge);
+}
+
+.map-mode-head > div {
+  flex:
+    1;
+}
+
+.map-mode-label {
+  display:
+    block;
+  font-size:
+    .72rem;
+  font-weight:
+    600;
+  letter-spacing:
+    .12em;
+  color:
+    var(--rust);
+  margin-bottom:
+    3px;
+}
+
+.map-mode-head h2 {
+  margin:
+    0;
+  font-family:
+    'Caveat',
+    cursive;
+  font-size:
+    1.8rem;
+  line-height:
+    1.1;
+  color:
+    var(--ink);
+}
+
+.map-mode-close {
+  border:
+    none;
+  background:
+    transparent;
+  color:
+    #77776f;
+  font-size:
+    1.2rem;
+  cursor:
+    pointer;
+  padding:
+    5px 7px;
+  border-radius:
+    7px;
+}
+
+.map-mode-close:hover {
+  background:
+    #f0ece2;
+  color:
+    var(--ink);
+}
+
+/* =========================================================
+   MAP MODE BODY
+   ========================================================= */
+
+.map-mode-body {
+  padding:
+    20px;
+  overflow-y:
+    auto;
+}
+
+.map-mode-body p {
+  margin:
+    0 0 18px;
+  font-size:
+    .96rem;
+  line-height:
+    1.55;
+  color:
+    #55564f;
+}
+
+.map-mode-placeholder {
+  min-height:
+    150px;
+  display:
+    flex;
+  align-items:
+    center;
+  justify-content:
+    center;
+  text-align:
+    center;
+  padding:
+    20px;
+  border:
+    1px dashed #c8c8c0;
+  border-radius:
+    10px;
+  background:
+    #f5f3ed;
+  color:
+    #8a8a80;
+  font-size:
+    .88rem;
+  line-height:
+    1.5;
+}
+
+/* =========================================================
+   MAP MODE FOOTER
+   ========================================================= */
+
+.map-mode-footer {
+  display:
+    flex;
+  justify-content:
+    flex-end;
+  padding:
+    14px 18px 18px;
+  border-top:
+    1px solid var(--paper-edge);
+}
+
+.map-reset-button {
+  border:
+    1px solid var(--paper-edge);
+  background:
+    #fffdf9;
+  color:
+    var(--ink);
+  font-family:
+    'Inter',
+    sans-serif;
+  font-size:
+    .86rem;
+  font-weight:
+    600;
+  padding:
+    9px 15px;
+  border-radius:
+    8px;
+  cursor:
+    pointer;
+  transition:
+    background .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.map-reset-button:hover {
+  background:
+    #f0ece2;
+  transform:
+    translateY(-1px);
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.08);
+}
+
+/* =========================================================
+   CATEGORY COLORS
+   ========================================================= */
+
+[data-glow="blue"] {
+  color: var(--c-blue);
+}
+
+[data-glow="red"] {
+  color: var(--c-red);
+}
+
+[data-glow="green"] {
+  color: var(--c-green);
+}
+
+[data-glow="violet"] {
+  color: var(--c-violet);
+}
+
+[data-glow="yellow"] {
+  color: var(--c-yellow);
+}
+
+/* =========================================================
+   HIDE SELECTED LEGEND CIRCLE WHILE ZOOMED
+   ========================================================= */
+
+.map-frame.is-zoomed .legend-dot.is-active {
+  opacity:
+    0;
+  pointer-events:
+    none;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .page.map-mode-active .map-frame {
+    left:
+      3vw;
+    top:
+      3vh;
+    width:
+      94vw;
+    transform:
+      none;
+  }
+
+  .map-mode-panel {
+    top:
+      auto;
+    bottom:
+      2vh;
+    left:
+      3vw;
+    right:
+      3vw;
+    width:
+      auto;
+    max-width:
+      none;
+    min-width:
+      0;
+    max-height:
+      42vh;
+    transform:
+      none;
+  }
+
+
+  @keyframes mapPanelIn {
+    from {
+      opacity:
+        0;
+      transform:
+        translateY(25px);
+    }
+
+    to {
+      opacity:
+        1;
+      transform:
+        translateY(0);
+    }
+  }
+}
+
+@media (max-width: 640px) {
+
+  .header-img {
+    height:
+      56px;
+  }
+
+  .legend-dot {
+    width:
+      7.2%;
+  }
+
+  .page.map-mode-active .map-frame {
+    top:
+      3vh;
+    left:
+      3vw;
+    width:
+      94vw;
+  }
+
+  .map-mode-panel {
+    bottom:
+      2vh;
+    left:
+      3vw;
+    right:
+      3vw;
+    max-height:
+      52vh;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .glow.is-active {
+    animation:
+      none;
+  }
+
+  .map-frame.is-zoomed .basis-img,
+  .map-frame.is-zoomed .glow {
+    transition:
+      none;
+  }
+
+  .explainer {
+    animation:
+      none;
+  }
+
+  .map-mode-panel {
+    animation:
+      none;
+  }
+
+  .page.map-mode-active .map-frame {
+    transition:
+      none;
+  }
+}
+/* Allow individual countries to receive clicks in Map Mode */
+.page.map-mode-active .hit-layer {
+  pointer-events: none;
+}
+
+.page.map-mode-active .country-layer {
+  pointer-events: auto;
+  z-index: 20;
+}
+
+/* =========================================================
+   INVISIBLE COUNTRY HIT AREAS — MAP MODE
+   ========================================================= */
+
+.country-hit-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.country-hit {
+  fill: transparent;
+  stroke: transparent;
+  pointer-events: none;
+  cursor: pointer;
+}
+
+/* Only allow country clicking in Map Mode */
+
+.page.map-mode-active .country-hit-layer {
+  pointer-events: auto;
+}
+
+.page.map-mode-active .country-hit {
+  pointer-events: auto;
+}
+
+/* Optional subtle feedback while testing.
+   Change opacity to 0 if you want them completely invisible. */
+
+.country-hit:hover {
+  fill: transparent;
+}
+/* =========================================================
+   COUNTRY INFORMATION
+   ========================================================= */
+
+.map-mode-country-info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.country-name-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+
+.country-flag {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.country-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f5f3ed;
+  border: 1px solid #e2dfd6;
+}
+
+.country-detail-label {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--rust);
+}
+
+.country-detail-value {
+  font-size: .95rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+/* =========================================================
+   STARTUP INTRO
+   ========================================================= */
+
+.startup-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(12, 16, 20, 0.94);
+
+  overflow: hidden;
+
+  opacity: 1;
+  visibility: visible;
+
+  transition:
+    opacity 0.9s ease,
+    visibility 0.9s ease;
+}
+
+/* Blurred version of the website behind the intro */
+.startup-blur {
+  position: absolute;
+  inset: -35px;
+
+  background:
+    linear-gradient(
+      rgba(15, 20, 25, 0.68),
+      rgba(15, 20, 25, 0.68)
+    ),
+    url("assets/basis.png") center / cover no-repeat;
+
+  filter: blur(16px);
+
+  transform: scale(1.08);
+
+  opacity: 0.65;
+}
+
+/* Main startup content */
+.startup-content {
+  position: relative;
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  animation: startupContentIn 1.5s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+/* Thin decorative line */
+.startup-line {
+  width: 0;
+  height: 2px;
+
+  margin-bottom: 22px;
+
+  background: rgba(255, 255, 255, 0.8);
+
+  animation: startupLineGrow 1s ease-out 0.25s forwards;
+}
+
+/* Header image */
+.startup-header {
+  width: min(560px, 72vw);
+  height: auto;
+
+  display: block;
+
+  opacity: 0;
+
+  filter:
+    blur(10px)
+    drop-shadow(0 0 0 rgba(255,255,255,0));
+
+  transform: scale(0.88);
+
+  animation:
+    startupHeaderIn 1.25s
+    cubic-bezier(.16, 1, .3, 1)
+    0.35s forwards;
+}
+
+/* Text underneath the header */
+.startup-subtitle {
+  margin-top: 18px;
+
+  font-family: Inter, Arial, sans-serif;
+
+  font-size: clamp(11px, 1.2vw, 15px);
+  font-weight: 600;
+
+  letter-spacing: 0.34em;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  opacity: 0;
+
+  transform: translateY(8px);
+
+  animation:
+    startupSubtitleIn
+    0.8s ease-out
+    0.95s forwards;
+}
+
+/* Three little loading dots */
+.startup-loading {
+  display: flex;
+  gap: 7px;
+
+  margin-top: 28px;
+
+  opacity: 0;
+
+  animation:
+    startupLoadingIn
+    0.6s ease-out
+    1.15s forwards;
+}
+
+.startup-loading span {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.8);
+
+  animation: startupDotPulse 1.2s ease-in-out infinite;
+}
+
+.startup-loading span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.startup-loading span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* Moving scan light */
+.startup-scan {
+  position: absolute;
+
+  left: -20%;
+  top: 0;
+
+  width: 18%;
+  height: 100%;
+
+  z-index: 4;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.055),
+    transparent
+  );
+
+  transform: skewX(-12deg);
+
+  animation: startupScan 2.6s ease-in-out 0.6s forwards;
+}
+
+/* Skip text */
+.startup-skip {
+  position: absolute;
+
+  z-index: 6;
+
+  left: 50%;
+  bottom: 34px;
+
+  transform: translateX(-50%);
+
+  border: 0;
+  background: transparent;
+
+  padding: 10px 16px;
+
+  font-family: Inter, Arial, sans-serif;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  letter-spacing: 0.24em;
+
+  color: rgba(255, 255, 255, 0.52);
+
+  cursor: pointer;
+
+  opacity: 0;
+
+  animation:
+    startupSkipIn
+    0.8s ease-out
+    1.5s forwards;
+
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.startup-skip:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* When the intro finishes */
+.startup-intro.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------
+   STARTUP ANIMATIONS
+   --------------------------------------------------------- */
+
+@keyframes startupContentIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes startupLineGrow {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+
+  to {
+    width: 70px;
+    opacity: 1;
+  }
+}
+
+@keyframes startupHeaderIn {
+  0% {
+    opacity: 0;
+    filter:
+      blur(10px)
+      drop-shadow(0 0 0 rgba(255,255,255,0));
+
+    transform: scale(0.88);
+  }
+
+  55% {
+    opacity: 1;
+    filter:
+      blur(0)
+      drop-shadow(0 0 24px rgba(255,255,255,0.14));
+
+    transform: scale(1.025);
+  }
+
+  100% {
+    opacity: 1;
+    filter:
+      blur(0)
+      drop-shadow(0 0 12px rgba(255,255,255,0.08));
+
+    transform: scale(1);
+  }
+}
+
+@keyframes startupSubtitleIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes startupLoadingIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes startupDotPulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes startupScan {
+  from {
+    left: -20%;
+  }
+
+  to {
+    left: 115%;
+  }
+}
+
+@keyframes startupSkipIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 800px) {
+
+  .startup-header {
+    width: 78vw;
+  }
+
+  .startup-subtitle {
+    font-size: 9px;
+    letter-spacing: 0.24em;
+  }
+
+  .startup-skip {
+    bottom: 24px;
+    font-size: 8px;
+  }
+}
+
+/* ---------------------------------------------------------
+   REDUCED MOTION
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .startup-content,
+  .startup-line,
+  .startup-header,
+  .startup-subtitle,
+  .startup-loading,
+  .startup-skip,
+  .startup-scan {
+    animation: none !important;
+  }
+
+  .startup-header,
+  .startup-subtitle,
+  .startup-loading,
+  .startup-skip {
+    opacity: 1;
+  }
+
+  .startup-line {
+    width: 70px;
+  }
+}
+

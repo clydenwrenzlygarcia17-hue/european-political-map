@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>European Political Map — Interactive</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+ <button
+  type="button"
+  class="music-toggle"
+  id="musicToggle"
+  aria-label="Mute music">
+  🔊
+</button>
+
+<body>
+
+<div class="page" id="page">
+
+  <!-- STARTUP INTRO -->
+<div class="startup-intro" id="startupIntro" aria-label="Opening animation">
+  <div class="startup-blur"></div>
+
+  <div class="startup-content">
+    <div class="startup-line"></div>
+
+    <img
+      src="assets/header2.png"
+      class="startup-header"
+      alt="European Political Map"
+    >
+
+    <div class="startup-subtitle">
+      EUROPEAN POLITICAL MAP
+    </div>
+
+    <div class="startup-loading">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="startup-scan"></div>
+
+  <button
+    class="startup-skip"
+    id="startupSkip"
+    type="button"
+    aria-label="Skip introduction"
+  >
+    TAP TO CONTINUE
+  </button>
+</div>
+<!-- END STARTUP INTRO -->
+
+  <header class="site-header"
+          id="headerTrigger"
+          tabindex="0"
+          role="button"
+          aria-label="About this map">
+
+    <img src="assets/header.png"
+         alt="European Political Map"
+         class="header-img">
+
+    <span class="header-hint">tap the title for notes</span>
+
+  </header>
+
+ 
+
+
+  <main class="map-shell">
+
+    <div class="map-frame" id="mapFrame">
+
+      <img src="assets/basis.png"
+           alt="European political map, coloured by system of government"
+           class="basis-img"
+           id="basisImg"
+           draggable="false">
+           <img src="assets/map-mode.png"
+     alt="European political map — Map Mode"
+     class="map-mode-img"
+     id="mapModeImage">
+
+
+      <!-- Glow overlays -->
+
+      <img src="assets/mask_blue.png"
+           class="glow"
+           data-glow="blue"
+           alt=""
+           draggable="false">
+
+      <img src="assets/mask_orange_red.png"
+           class="glow"
+           data-glow="red"
+           alt=""
+           draggable="false">
+
+      <img src="assets/mask_green.png"
+           class="glow"
+           data-glow="green"
+           alt=""
+           draggable="false">
+
+      <img src="assets/mask_violet.png"
+           class="glow"
+           data-glow="violet"
+           alt=""
+           draggable="false">
+
+      <img src="assets/mask_yellow.png"
+           class="glow"
+           data-glow="yellow"
+           alt=""
+           draggable="false">
+
+
+            <!-- Map click layer -->
+      <!-- Stage 1: clicking anywhere on the map enters Map Mode -->
+
+      <button 
+        class="hit-layer" 
+        id="hitLayer" 
+        type="button" 
+        aria-label="Open map interaction mode">
+      </button>
+
+
+      <!-- =========================================================
+           INVISIBLE COUNTRY HIT AREAS — MAP MODE
+           ========================================================= -->
+
+      <svg
+        class="country-hit-layer"
+        id="countryHitLayer"
+        viewBox="0 0 2048 1447"
+        preserveAspectRatio="none"  
+        aria-hidden="true">
+
+        <!-- Iceland -->
+        <polygon
+          class="country-hit"
+          data-country="iceland"
+          points="
+            330,205
+            375,185
+            425,205
+            455,240
+            440,285
+            405,315
+            360,310
+            330,280
+          ">
+        </polygon>
+
+        <!-- Ireland -->
+        <polygon
+          class="country-hit"
+          data-country="ireland"
+          points="
+            540,735
+            575,710
+            625,720
+            655,750
+            650,805
+            620,835
+            575,840
+            545,815
+            535,775
+          ">
+        </polygon>
+
+        <!-- United Kingdom -->
+        <polygon
+          class="country-hit"
+          data-country="unitedkingdom"
+          points="
+            665,620
+            710,600
+            755,620
+            790,670
+            775,720
+            760,775
+            780,835
+            765,885
+            720,910
+            680,890
+            650,845
+            660,790
+            640,735
+            650,680
+          ">
+        </polygon>
+
+        <!-- Norway -->
+        <polygon
+          class="country-hit"
+          data-country="norway"
+          points="
+            900,610
+            905,550
+            920,480
+            935,420
+            950,360
+            970,300
+            995,245
+            1025,205
+            1055,220
+            1065,270
+            1045,330
+            1030,395
+            1020,465
+            1010,535
+            1000,600
+            980,655
+            945,680
+            915,660
+          ">
+        </polygon>
+
+        <!-- Sweden -->
+        <polygon
+          class="country-hit"
+          data-country="sweden"
+          points="
+            1030,270
+            1060,285
+            1090,330
+            1105,390
+            1115,460
+            1115,535
+            1105,600
+            1090,670
+            1070,730
+            1045,765
+            1015,735
+            1010,680
+            1025,615
+            1035,550
+            1035,480
+            1035,410
+            1025,350
+          ">
+        </polygon>
+
+        <!-- Denmark -->
+        <polygon
+          class="country-hit"
+          data-country="denmark"
+          points="
+            965,685
+            985,670
+            1010,680
+            1035,700
+            1060,720
+            1065,750
+            1050,775
+            1025,785
+            1000,775
+            975,755
+            950,735
+            950,705
+          ">
+        </polygon>
+
+        <!-- Finland -->
+        <polygon
+          class="country-hit"
+          data-country="finland"
+          points="
+            1160,270
+            1190,230
+            1230,215
+            1270,235
+            1300,275
+            1315,330
+            1310,395
+            1295,455
+            1275,520
+            1245,565
+            1210,575
+            1175,545
+            1160,500
+            1165,440
+            1155,380
+            1150,325
+          ">
+        </polygon>
+
+        <!-- Estonia -->
+        <polygon
+          class="country-hit"
+          data-country="estonia"
+          points="
+            1185,590
+            1210,575
+            1245,585
+            1260,605
+            1255,635
+            1235,650
+            1205,645
+            1185,625
+          ">
+        </polygon>
+
+        <!-- Latvia -->
+        <polygon
+          class="country-hit"
+          data-country="latvia"
+          points="
+            1190,640
+            1220,635
+            1255,645
+            1275,670
+            1265,700
+            1240,715
+            1205,700
+            1188,675
+          ">
+        </polygon>
+
+        <!-- Lithuania -->
+        <polygon
+          class="country-hit"
+          data-country="lithuania"
+          points="
+            1195,700
+            1230,705
+            1265,700
+            1280,725
+            1265,755
+            1235,775
+            1200,755
+            1188,730
+          ">
+        </polygon>
+       <!-- Portugal -->
+<polygon 
+  class="country-hit" 
+  data-country="portugal" 
+  points="
+    442,1174
+    491,1157
+    535,1186
+    540,1248
+    528,1309
+    503,1358
+    462,1334
+    437,1272
+    432,1211
+  ">
+</polygon>
+
+        <!-- Netherlands -->
+        <polygon
+          class="country-hit"
+          data-country="netherlands"
+          points="
+            875,825
+            915,820
+            945,835
+            955,865
+            940,895
+            915,915
+            885,905
+            865,880
+            860,850
+          ">
+        </polygon>
+
+        <!-- Belgium -->
+        <polygon
+          class="country-hit"
+          data-country="belgium"
+          points="
+            860,920
+            895,910
+            930,925
+            945,955
+            930,985
+            895,995
+            865,980
+            850,950
+          ">
+        </polygon>
+
+        <!-- France -->
+        <polygon
+          class="country-hit"
+          data-country="france"
+          points="
+            650,960
+            720,940
+            805,950
+            885,980
+            970,1015
+            1000,1080
+            990,1170
+            960,1260
+            915,1340
+            840,1385
+            750,1370
+            680,1330
+            635,1260
+            620,1170
+            625,1080
+          ">
+        </polygon>
+
+        <!-- Switzerland -->
+        <polygon
+          class="country-hit"
+          data-country="switzerland"
+          points="
+            890,1040
+            930,1025
+            980,1035
+            1025,1055
+            1045,1090
+            1025,1125
+            985,1145
+            940,1140
+            900,1120
+            875,1085
+          ">
+        </polygon>
+
+        <!-- Germany -->
+<polygon
+  class="country-hit"
+  data-country="germany"
+  points="
+    945,778
+    940,798
+    967,824
+    911,821
+    909,867
+    882,883
+    890,962
+    933,981
+    914,1027
+    974,1041
+    1039,1030
+    1032,1007
+    1057,992
+    1014,935
+    1075,912
+    1057,818
+    1037,788
+    997,813
+  ">
+</polygon>
+
+
+<!-- Poland -->
+<polygon
+  class="country-hit"
+  data-country="poland"
+  points="
+    1123,769
+    1152,787
+    1239,776
+    1260,820
+    1245,844
+    1277,886
+    1258,954
+    1233,943
+    1173,953
+    1143,927
+    1113,919
+    1078,911
+    1057,845
+    1065,807
+  ">
+</polygon>
+
+
+<!-- Czechia -->
+<polygon
+  class="country-hit"
+  data-country="czechia"
+  points="
+    1017,934
+    1031,919
+    1093,909
+    1154,924
+    1208,934
+    1252,953
+    1247,978
+    1218,995
+    1174,1000
+    1132,988
+    1093,985
+    1058,975
+    1031,961
+    1017,943
+  ">
+</polygon>
+
+
+<!-- Slovakia -->
+<polygon
+  class="country-hit"
+  data-country="slovakia"
+  points="
+    1208,934
+    1252,953
+    1255,980
+    1243,1002
+    1216,1017
+    1179,1020
+    1149,1007
+    1125,993
+    1154,980
+    1201,980
+    1208,963
+  ">
+</polygon>
+
+
+<!-- Austria -->
+<polygon
+  class="country-hit"
+  data-country="austria"
+  points="
+    1029,990
+    1080,993
+    1120,1002
+    1154,1007
+    1196,993
+    1250,988
+    1250,1017
+    1235,1042
+    1250,1059
+    1228,1076
+    1193,1086
+    1159,1081
+    1125,1091
+    1090,1078
+    1058,1081
+    1029,1064
+    1012,1042
+    1026,1017
+  ">
+</polygon>
+
+
+<!-- Spain -->
+<polygon 
+  class="country-hit" 
+  data-country="spain" 
+  points="
+    486,1112
+    565,1095
+    700,1098
+    835,1137
+    909,1186
+    884,1272
+    835,1346
+    737,1383
+    614,1388
+    516,1358
+    467,1297
+    454,1211
+  ">
+</polygon>
+
+
+<!-- Italy -->
+<polygon
+  class="country-hit"
+  data-country="italy"
+  points="
+    892,1090
+    908,1160
+    971,1152
+    999,1213
+    1029,1150
+    1052,1067
+    999,1053
+    975,1081
+    954,1070
+    948,1095
+    929,1073
+  ">
+</polygon>
+
+
+<!-- Sardinia -->
+<polygon
+  class="country-hit"
+  data-country="italy"
+  points="
+    951,1252
+    930,1266
+    922,1260
+    930,1298
+    924,1311
+    932,1334
+    942,1331
+    945,1317
+    955,1319
+    961,1292
+    957,1282
+    964,1271
+    954,1262
+    959,1256
+  ">
+</polygon>
+
+
+<!-- Sicily -->
+<polygon
+  class="country-hit"
+  data-country="italy"
+  points="
+    1121,1347
+    1080,1364
+    1066,1362
+    1062,1355
+    1049,1361
+    1044,1357
+    1037,1369
+    1083,1393
+    1094,1391
+    1097,1400
+    1115,1401
+    1118,1390
+    1111,1375
+  ">
+</polygon>
+
+
+<!-- Slovenia -->
+<polygon
+  class="country-hit"
+  data-country="slovenia"
+  points="
+    1253,958
+    1224,946
+    1194,961
+    1182,950
+    1127,993
+    1148,1014
+    1171,1012
+    1213,976
+    1248,978
+  ">
+</polygon>
+
+
+<!-- Hungary -->
+<polygon
+  class="country-hit"
+  data-country="hungary"
+  points="
+    1266,988
+    1214,979
+    1175,1014
+    1136,1009
+    1117,1048
+    1148,1079
+    1174,1084
+    1200,1062
+    1235,1054
+    1251,1000
+  ">
+</polygon>
+
+
+<!-- Croatia -->
+<polygon
+  class="country-hit"
+  data-country="croatia"
+  points="
+    1056,1105
+    1064,1124
+    1080,1106
+    1079,1132
+    1086,1111
+    1119,1165
+    1162,1182
+    1109,1109
+    1194,1107
+    1183,1079
+    1148,1083
+    1122,1061
+    1101,1101
+  ">
+</polygon>
+
+
+<!-- Bosnia & Herzegovina -->
+<polygon
+  class="country-hit"
+  data-country="bosniaandherzegovina"
+  points="
+    1114,1108
+    1123,1139
+    1167,1182
+    1187,1190
+    1190,1166
+    1199,1164
+    1193,1157
+    1210,1151
+    1194,1130
+    1198,1112
+    1139,1104
+    1126,1116
+  ">
+</polygon>
+
+
+<!-- =========================
+     BALKANS
+     Serbia
+     Kosovo
+     Albania
+     North Macedonia
+     Bulgaria
+     Greece
+     ========================= -->
+
+<!-- Serbia -->
+<polygon
+  class="country-hit"
+  data-country="serbia"
+  points="
+    1212,1093
+    1244,1091
+    1278,1091
+    1308,1098
+    1320,1125
+    1313,1155
+    1298,1174
+    1286,1192
+    1261,1184
+    1242,1174
+    1227,1155
+    1212,1135
+    1205,1113
+  ">
+</polygon>
+
+<!-- Kosovo -->
+<polygon
+  class="country-hit"
+  data-country="kosovo"
+  points="
+    1198,1168
+    1208,1168
+    1218,1170
+    1228,1170
+    1238,1167
+    1247,1162
+    1255,1167
+    1262,1172
+    1268,1180
+    1265,1188
+    1258,1193
+    1249,1194
+    1241,1200
+    1231,1201
+    1222,1206
+    1213,1203
+    1208,1197
+    1200,1193
+    1195,1185
+    1198,1176
+  ">
+</polygon>
+
+<!-- Albania -->
+<polygon
+  class="country-hit"
+  data-country="albania"
+  points="
+    1222,1179
+    1237,1177
+    1249,1194
+    1247,1221
+    1239,1246
+    1232,1275
+    1219,1287
+    1212,1268
+    1215,1243
+    1212,1219
+    1215,1199
+  ">
+</polygon>
+
+<!-- North Macedonia -->
+<polygon
+  class="country-hit"
+  data-country="northmacedonia"
+  points="
+    1257,1198
+    1263,1196
+    1286,1188
+    1306,1198
+    1307,1210
+    1299,1217
+    1299,1223
+    1290,1224
+    1281,1228
+    1273,1237
+    1251,1239
+    1247,1234
+    1246,1214
+    1257,1198
+  ">
+</polygon>
+
+<!-- Bulgaria -->
+<polygon
+  class="country-hit"
+  data-country="bulgaria"
+  points="
+    1315,1093
+    1352,1091
+    1392,1093
+    1421,1106
+    1438,1130
+    1433,1157
+    1414,1179
+    1384,1187
+    1350,1179
+    1323,1169
+    1308,1147
+    1310,1120
+  ">
+</polygon>
+
+<!-- Greece -->
+<polygon
+  class="country-hit"
+  data-country="greece"
+  points="
+    1264,1228
+    1293,1228
+    1325,1241
+    1355,1238
+    1384,1228
+    1414,1228
+    1436,1248
+    1426,1273
+    1436,1300
+    1424,1327
+    1401,1341
+    1379,1354
+    1355,1351
+    1340,1332
+    1320,1327
+    1303,1309
+    1286,1297
+    1271,1277
+    1259,1258
+  ">
+</polygon>
+
+
+<!-- Montenegro -->
+<polygon 
+  class="country-hit" 
+  data-country="montenegro" 
+  points="
+    1488,1198
+    1525,1186
+    1559,1206
+    1564,1238
+    1542,1260
+    1505,1253
+    1483,1228
+  ">
+</polygon>
+
+
+<!-- Romania -->
+<polygon
+  class="country-hit"
+  data-country="romania"
+  points="
+    1355,964
+    1317,993
+    1275,986
+    1254,1002
+    1238,1057
+    1219,1063
+    1258,1107
+    1284,1103
+    1294,1131
+    1361,1123
+    1394,1097
+    1433,1100
+    1429,1060
+    1445,1061
+    1447,1049
+    1407,1050
+    1397,1005
+  ">
+</polygon>
+
+<!-- Moldova -->
+<polygon
+  class="country-hit"
+  data-country="moldova"
+  points="
+    1359,959
+    1375,953
+    1384,966
+    1394,969
+    1387,973
+    1393,983
+    1400,976
+    1393,973
+    1403,968
+    1395,966
+    1399,959
+    1409,959
+    1413,976
+    1426,979
+    1425,988
+    1438,994
+    1437,1004
+    1420,1009
+    1425,1018
+    1417,1043
+    1409,1046
+    1402,1010
+    1412,1004
+    1400,1004
+  ">
+</polygon>
+
+<!-- Ukraine -->
+<polygon
+  class="country-hit"
+  data-country="ukraine"
+  points="
+    1644,862
+    1626,822
+    1521,835
+    1463,780
+    1408,840
+    1277,851
+    1256,966
+    1317,989
+    1411,955
+    1452,1003
+    1423,1051
+    1474,961
+    1491,997
+    1530,987
+    1520,1016
+    1556,1041
+    1603,988
+    1531,983
+    1619,918
+  ">
+</polygon>
+
+<!-- Belarus -->
+<polygon
+  class="country-hit"
+  data-country="belarus"
+  points="
+    1431,753
+    1407,749
+    1375,721
+    1374,694
+    1316,691
+    1296,711
+    1305,723
+    1286,743
+    1291,765
+    1249,787
+    1263,818
+    1249,841
+    1268,860
+    1275,847
+    1311,838
+    1408,835
+    1405,811
+    1421,797
+    1405,767
+  ">
+</polygon>
+
+<!-- Russia -->
+<polygon
+  class="country-hit"
+  data-country="russia"
+  points="
+    1545,17
+    1447,234
+    1383,196
+    1379,385
+    1258,304
+    1364,240
+    1210,243
+    1291,638
+    1427,799
+    1629,819
+    1616,992
+    1909,1000
+    1756,721
+    1990,524
+    1912,436
+    2045,277
+    2047,0
+  ">
+</polygon>
+
+<!-- Cyprus -->
+<polygon
+  class="country-hit"
+  data-country="cyprus"
+  points="
+    1601,1371
+    1615,1360
+    1630,1358
+    1642,1352
+    1655,1355
+    1665,1364
+    1657,1373
+    1647,1380
+    1637,1387
+    1624,1391
+    1611,1388
+    1603,1381
+  ">
+</polygon>
+
+<!-- Turkey -->
+<polygon
+  class="country-hit"
+  data-country="turkey"
+  points="
+    1900,1167
+    1863,1082
+    1795,1053
+    1708,1125
+    1570,1128
+    1403,1251
+    1449,1338
+    1525,1350
+    1546,1318
+    1606,1331
+    1683,1272
+    1696,1302
+    1704,1266
+  ">
+</polygon>
+
+
+<!-- San Marino -->
+<circle 
+  class="country-hit" 
+  data-country="sanmarino" 
+  cx="1162" 
+  cy="1062" 
+  r="12">
+</circle>
+
+
+<!-- Vatican City -->
+<circle 
+  class="country-hit" 
+  data-country="vaticancity" 
+  cx="1118" 
+  cy="1148" 
+  r="12">
+</circle>
+      </svg>
+
+
+      <!-- Legend hotspots -->
+
+      <div class="legend-hotspots" id="legendHotspots"></div>
+
+    </div>
+
+
+    
+
+  </main>
+
+
+  <!-- =========================================================
+       OLD CATEGORY EXPLANATION
+       ========================================================= -->
+
+  <div class="overlay-scrim"
+       id="scrim"
+       hidden>
+  </div>
+
+
+  <aside class="explainer"
+         id="explainer"
+         hidden
+         aria-hidden="true">
+
+    <div class="explainer-head">
+
+      <span class="explainer-dot"
+            id="explainerDot">
+      </span>
+
+      <h2 id="explainerTitle">
+        Title
+      </h2>
+
+      <button
+        type="button"
+        class="explainer-close"
+        id="explainerClose"
+        aria-label="Close">
+        ✕
+      </button>
+
+    </div>
+
+
+    <div class="explainer-body"
+         id="explainerBody">
+
+      <!-- Filled by explanations{} in script.js -->
+
+    </div>
+
+  </aside>
+
+
+  <!-- =========================================================
+       STAGE 1 — MAP MODE
+       ========================================================= -->
+
+  <div class="map-mode-panel"
+       id="mapModePanel"
+       hidden
+       aria-hidden="true">
+
+    <div class="map-mode-head">
+
+      <div>
+
+        <span class="map-mode-label">
+          MAP MODE
+        </span>
+
+        <h2>
+          Explore the Map
+        </h2>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="map-mode-close"
+        id="mapModeClose"
+        aria-label="Close map mode">
+        ✕
+      </button>
+      
+
+    </div>
+
+
+    <div class="map-mode-body">
+
+      <p>
+        Select an area of the map to explore its political system.
+      </p>
+
+      <div class="map-mode-placeholder">
+        Country information will appear here in the next stage.
+      </div>
+
+    </div>
+
+
+    <div class="map-mode-footer">
+
+      <button
+        type="button"
+        class="map-reset-button"
+        id="mapResetButton">
+        Reset View
+      </button>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+</div>
+
+<audio id="backgroundMusic" loop>
+  <source src="assets/FairyTail.mp3" type="audio/mpeg">
+</audio>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+
+
