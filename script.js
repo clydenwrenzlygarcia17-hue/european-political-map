@@ -1,8 +1,4 @@
 /* =========================================================================
-   EUROPEAN POLITICAL MAP
-   ========================================================================= */
-
-/* =========================================================================
    EXPLANATIONS
    ========================================================================= */
 
@@ -25,81 +21,41 @@ const categories = {
   red: {
     title: "Authoritarian / Hybrid Regime",
     color: "#fd3f00",
-    legendIcon: "assets/l_red.png",
-    legendPos: {
-      x: 0.0584,
-      y: 0.4775
-    },
-    bbox: [
-      0.5718,
-      0.0096,
-      0.9927,
-      0.9325
-    ]
+    legendIcon: "l_red.png",
+    legendPos: { x: 0.0584, y: 0.4775 },
+    bbox: [0.5718, 0.0096, 0.9927, 0.9325]
   },
 
   blue: {
     title: "Constitutional Monarchy",
     color: "#1ea0e6",
-    legendIcon: "assets/l_blue.png",
-    legendPos: {
-      x: 0.0584,
-      y: 0.3958
-    },
-    bbox: [
-      0.2982,
-      0.1325,
-      0.7018,
-      0.9839
-    ]
+    legendIcon: "l_blue.png",
+    legendPos: { x: 0.0584, y: 0.3958 },
+    bbox: [0.2982, 0.1325, 0.7018, 0.9839]
   },
 
   yellow: {
     title: "Presidential Republic",
     color: "#e0a028",
-    legendIcon: "assets/l_yellow.png",
-    legendPos: {
-      x: 0.0584,
-      y: 0.7190
-    },
-    bbox: [
-      0.2091,
-      0.0907,
-      0.7064,
-      0.9640
-    ]
+    legendIcon: "l_yellow.png",
+    legendPos: { x: 0.0584, y: 0.7190 },
+    bbox: [0.2091, 0.0907, 0.7064, 0.9640]
   },
 
   violet: {
     title: "Semi-Presidential Republic",
     color: "#6e1496",
-    legendIcon: "assets/l_violet.png",
-    legendPos: {
-      x: 0.0568,
-      y: 0.6357
-    },
-    bbox: [
-      0.3100,
-      0.6257,
-      0.4732,
-      0.8579
-    ]
+    legendIcon: "l_violet.png",
+    legendPos: { x: 0.0568, y: 0.6357 },
+    bbox: [0.3100, 0.6257, 0.4732, 0.8579]
   },
 
   green: {
     title: "Parliamentary Republic",
     color: "#2a6e2a",
-    legendIcon: "assets/l_green.png",
-    legendPos: {
-      x: 0.0576,
-      y: 0.5590
-    },
-    bbox: [
-      0.2168,
-      0.1595,
-      0.7000,
-      0.9672
-    ]
+    legendIcon: "l_green.png",
+    legendPos: { x: 0.0576, y: 0.5590 },
+    bbox: [0.2168, 0.1595, 0.7000, 0.9672]
   }
 
 };
@@ -112,89 +68,38 @@ const categories = {
 let activeCategory = null;
 let mapModeActive = false;
 
-const page =
-  document.getElementById("page");
+const page = document.getElementById("page");
 
-const mapFrame =
-  document.getElementById("mapFrame");
+const mapFrame = document.getElementById("mapFrame");
+const basisImg = document.getElementById("basisImg");
+const legendWrap = document.getElementById("legendHotspots");
 
-const basisImg =
-  document.getElementById("basisImg");
+const scrim = document.getElementById("scrim");
 
-const mapModeImage =
-  document.getElementById("mapModeImage");
+const explainer = document.getElementById("explainer");
+const explainerDot = document.getElementById("explainerDot");
+const explainerTitle = document.getElementById("explainerTitle");
+const explainerBody = document.getElementById("explainerBody");
+const explainerClose = document.getElementById("explainerClose");
 
-const legendWrap =
-  document.getElementById("legendHotspots");
+const headerTrigger = document.getElementById("headerTrigger");
 
-const scrim =
-  document.getElementById("scrim");
+const hitLayer = document.getElementById("hitLayer");
+const icelandLayer = document.getElementById("icelandLayer");
 
-const explainer =
-  document.getElementById("explainer");
+const mapModePanel = document.getElementById("mapModePanel");
+const mapModeClose = document.getElementById("mapModeClose");
+const mapResetButton = document.getElementById("mapResetButton");
 
-const explainerDot =
-  document.getElementById("explainerDot");
+const countryHitLayer = document.getElementById("countryHitLayer");
 
-const explainerTitle =
-  document.getElementById("explainerTitle");
+const mapModeTitle = mapModePanel
+  ? mapModePanel.querySelector(".map-mode-head h2")
+  : null;
 
-const explainerBody =
-  document.getElementById("explainerBody");
-
-const explainerClose =
-  document.getElementById("explainerClose");
-
-const headerTrigger =
-  document.getElementById("headerTrigger");
-
-const hitLayer =
-  document.getElementById("hitLayer");
-
-const mapModePanel =
-  document.getElementById("mapModePanel");
-
-const mapModeClose =
-  document.getElementById("mapModeClose");
-
-const mapResetButton =
-  document.getElementById("mapResetButton");
-
-const countryHitLayer =
-  document.getElementById("countryHitLayer");
-
-
-/*
-   Keep the SVG country-hit layer aligned with the map images.
-
-   The map images use object-fit: contain.
-   Therefore the SVG should use the equivalent
-   preserveAspectRatio behavior: xMidYMid meet.
-*/
-
-if (countryHitLayer) {
-
-  countryHitLayer.setAttribute(
-    "preserveAspectRatio",
-    "xMidYMid meet"
-  );
-
-}
-
-
-const mapModeTitle =
-  mapModePanel
-    ? mapModePanel.querySelector(
-        ".map-mode-head h2"
-      )
-    : null;
-
-const mapModeBody =
-  mapModePanel
-    ? mapModePanel.querySelector(
-        ".map-mode-body"
-      )
-    : null;
+const mapModeBody = mapModePanel
+  ? mapModePanel.querySelector(".map-mode-body")
+  : null;
 
 
 /* =========================================================================
@@ -203,90 +108,59 @@ const mapModeBody =
 
 const glowEls = {};
 
-document
-  .querySelectorAll(".glow")
-  .forEach(el => {
-
-    glowEls[
-      el.dataset.glow
-    ] = el;
-
-  });
+document.querySelectorAll(".glow").forEach(el => {
+  glowEls[el.dataset.glow] = el;
+});
 
 
 /* =========================================================================
-   LEGEND
+   LEGEND HOTSPOTS
    ========================================================================= */
 
-if (legendWrap) {
+Object.entries(categories).forEach(([key, cat]) => {
 
-  Object.entries(categories)
-    .forEach(
-      ([key, cat]) => {
+  const dot = document.createElement("button");
 
-        const dot =
-          document.createElement("button");
+  dot.className = "legend-dot";
 
-        dot.type = "button";
+  dot.style.left =
+    (cat.legendPos.x * 100) + "%";
 
-        dot.className =
-          "legend-dot";
+  dot.style.top =
+    (cat.legendPos.y * 100) + "%";
 
-        dot.style.left =
-          `${cat.legendPos.x * 100}%`;
+  dot.style.color =
+    cat.color;
 
-        dot.style.top =
-          `${cat.legendPos.y * 100}%`;
+  dot.dataset.category =
+    key;
 
-        dot.style.color =
-          cat.color;
-
-        dot.dataset.category =
-          key;
-
-        dot.setAttribute(
-          "aria-label",
-          cat.title
-        );
+  dot.setAttribute(
+    "aria-label",
+    cat.title
+  );
 
 
-        /*
-           Legend is for reference only.
+  // Legend is for reference only.
+  // It does not open a popup or zoom the map.
 
-           It does not open a popup
-           or zoom the map.
-        */
-
-        dot.addEventListener(
-          "click",
-          function(e) {
-
-            e.preventDefault();
-            e.stopPropagation();
-
-          }
-        );
+  dot.addEventListener("click", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  });
 
 
-        const tip =
-          document.createElement("img");
+  const tip = document.createElement("img");
 
-        tip.src =
-          cat.legendIcon;
+  tip.src = cat.legendIcon;
+  tip.alt = "";
+  tip.className = "legend-tip";
 
-        tip.alt = "";
+  dot.appendChild(tip);
 
-        tip.className =
-          "legend-tip";
+  legendWrap.appendChild(dot);
 
-        dot.appendChild(tip);
-
-        legendWrap.appendChild(dot);
-
-      }
-    );
-
-}
+});
 
 
 /* =========================================================================
@@ -295,44 +169,157 @@ if (legendWrap) {
 
 /*
    HOMEPAGE:
-
-   Clicking anywhere on the map
-   opens Map Mode.
-
+   Clicking anywhere on the map opens Map Mode.
 
    MAP MODE:
+   Iceland is handled separately by the Iceland layer.
+ */
 
-   The SVG country-hit layer handles
-   individual country clicks.
-*/
+hitLayer.addEventListener("click", function(e) {
 
-if (hitLayer) {
+  e.preventDefault();
+  e.stopPropagation();
 
-  hitLayer.addEventListener(
-    "click",
-    function(e) {
+  /*
+    If Map Mode is already active, do not reopen it.
+    Iceland handles its own click.
+   */
 
-      e.preventDefault();
-      e.stopPropagation();
+  if (mapModeActive) {
+    return;
+  }
 
+  openMapMode();
 
-      /*
-         If Map Mode is already active,
-         do not reopen it.
-
-         Individual countries are handled
-         by the SVG country-hit layer.
-      */
-
-      if (mapModeActive) {
-        return;
-      }
+});
 
 
-      openMapMode();
+/* =========================================================================
+   ICELAND HIT TEST
+   ========================================================================= */
 
-    }
+/*
+   The Iceland PNG contains transparent space around the country.
+
+   This canvas checks the actual visible pixels of the PNG,
+   so only the Iceland artwork itself is clickable.
+ */
+
+let icelandHitCanvas = null;
+let icelandHitContext = null;
+
+
+function prepareIcelandHitTest() {
+
+  if (
+    !icelandLayer ||
+    !icelandLayer.complete ||
+    !icelandLayer.naturalWidth
+  ) {
+    return;
+  }
+
+
+  icelandHitCanvas =
+    document.createElement("canvas");
+
+  icelandHitCanvas.width =
+    icelandLayer.naturalWidth;
+
+  icelandHitCanvas.height =
+    icelandLayer.naturalHeight;
+
+
+  icelandHitContext =
+    icelandHitCanvas.getContext("2d", {
+      willReadFrequently: true
+    });
+
+
+  icelandHitContext.drawImage(
+    icelandLayer,
+    0,
+    0
   );
+
+}
+
+
+function isInsideIceland(event) {
+
+  if (!icelandLayer) {
+    return false;
+  }
+
+
+  if (!icelandHitContext) {
+    prepareIcelandHitTest();
+  }
+
+
+  if (!icelandHitContext) {
+    return false;
+  }
+
+
+  const rect =
+    icelandLayer.getBoundingClientRect();
+
+
+  if (
+    event.clientX < rect.left ||
+    event.clientX > rect.right ||
+    event.clientY < rect.top ||
+    event.clientY > rect.bottom
+  ) {
+    return false;
+  }
+
+
+  const x = Math.floor(
+    ((event.clientX - rect.left) / rect.width) *
+    icelandLayer.naturalWidth
+  );
+
+
+  const y = Math.floor(
+    ((event.clientY - rect.top) / rect.height) *
+    icelandLayer.naturalHeight
+  );
+
+
+  if (
+    x < 0 ||
+    y < 0 ||
+    x >= icelandLayer.naturalWidth ||
+    y >= icelandLayer.naturalHeight
+  ) {
+    return false;
+  }
+
+
+  /*
+    The asset contains the word "Iceland"
+    below the actual country shape.
+
+    Keep that text outside the clickable area.
+   */
+
+  if (y > 480) {
+    return false;
+  }
+
+
+  const pixel =
+    icelandHitContext.getImageData(
+      x,
+      y,
+      1,
+      1
+    ).data;
+
+
+  return pixel[3] > 40;
 
 }
 
@@ -343,10 +330,7 @@ if (hitLayer) {
 
 function resetMapModeInformation() {
 
-  if (
-    !mapModeTitle ||
-    !mapModeBody
-  ) {
+  if (!mapModeTitle || !mapModeBody) {
     return;
   }
 
@@ -369,20 +353,134 @@ function resetMapModeInformation() {
 
 
 /* =========================================================================
+   SHOW ICELAND INFORMATION
+   ========================================================================= */
+
+function showIceland() {
+
+  /*
+     Keep Map Mode open.
+     We only change the information panel.
+   */
+
+  mapModeActive = true;
+
+  page.classList.add("map-mode-active");
+
+  mapModePanel.hidden = false;
+
+  mapModePanel.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  /*
+     Change the Map Mode panel content.
+   */
+
+  const panelTitle =
+    mapModePanel.querySelector("h2");
+
+  const panelBody =
+    mapModePanel.querySelector(".map-mode-body");
+
+
+  if (panelTitle) {
+
+    panelTitle.textContent =
+      "Iceland";
+
+  }
+
+
+  if (panelBody) {
+
+    panelBody.innerHTML = `
+      <div class="map-mode-placeholder">
+        🇮🇸 Iceland
+        <br>
+        Parliamentary Republic
+        <br>
+        Reykjavík
+      </div>
+
+      <p>
+        Iceland is a parliamentary republic. The President serves as the head of state, while the Prime Minister leads the government.
+      </p>
+    `;
+
+  }
+
+}
+
+
+/* =========================================================================
+   ICELAND CLICK EVENT
+   ========================================================================= */
+
+if (icelandLayer) {
+
+  /*
+    Prepare the hit-test canvas when the image loads.
+   */
+
+  icelandLayer.addEventListener(
+    "load",
+    function() {
+
+      icelandHitCanvas = null;
+      icelandHitContext = null;
+
+      prepareIcelandHitTest();
+
+    }
+  );
+
+
+  if (icelandLayer.complete) {
+    prepareIcelandHitTest();
+  }
+
+
+  /*
+    Iceland can only be clicked in Map Mode.
+   */
+
+  icelandLayer.addEventListener(
+    "click",
+    function(e) {
+
+      e.preventDefault();
+      e.stopPropagation();
+
+
+      if (!mapModeActive) {
+        return;
+      }
+
+
+      if (isInsideIceland(e)) {
+        showIceland();
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================================
    HEADER
    ========================================================================= */
 
 function openHeader() {
 
   closeMapMode();
-
   clearMapSelection();
-
   removeZoom();
 
-  activeCategory =
-    "header";
-
+  activeCategory = "header";
 
   openExplainer({
 
@@ -400,33 +498,29 @@ function openHeader() {
 }
 
 
-if (headerTrigger) {
-
-  headerTrigger.addEventListener(
-    "click",
-    openHeader
-  );
+headerTrigger.addEventListener(
+  "click",
+  openHeader
+);
 
 
-  headerTrigger.addEventListener(
-    "keydown",
-    function(e) {
+headerTrigger.addEventListener(
+  "keydown",
+  function(e) {
 
-      if (
-        e.key === "Enter" ||
-        e.key === " "
-      ) {
+    if (
+      e.key === "Enter" ||
+      e.key === " "
+    ) {
 
-        e.preventDefault();
+      e.preventDefault();
 
-        openHeader();
-
-      }
+      openHeader();
 
     }
-  );
 
-}
+  }
+);
 
 
 /* =========================================================================
@@ -436,9 +530,7 @@ if (headerTrigger) {
 function selectCategory(key) {
 
   if (mapModeActive) {
-
     closeMapMode();
-
   }
 
 
@@ -447,7 +539,6 @@ function selectCategory(key) {
   ) {
 
     resetView();
-
     return;
 
   }
@@ -456,14 +547,8 @@ function selectCategory(key) {
   activeCategory =
     key;
 
-
   const cat =
     categories[key];
-
-
-  if (!cat) {
-    return;
-  }
 
 
   Object.entries(
@@ -530,28 +615,24 @@ function openMapMode() {
 
   startBackgroundMusic();
 
-
   closeExplainer();
 
   clearMapSelection();
 
   removeZoom();
 
-  activeCategory =
-    null;
+  activeCategory = null;
 
 
   /*
-     Restore the default Map Mode
-     information every time Map Mode
-     is opened.
-  */
+    Restore the default Map Mode information
+    every time Map Mode is opened.
+   */
 
   resetMapModeInformation();
 
 
-  mapModeActive =
-    true;
+  mapModeActive = true;
 
 
   page.classList.add(
@@ -559,8 +640,7 @@ function openMapMode() {
   );
 
 
-  mapModePanel.hidden =
-    false;
+  mapModePanel.hidden = false;
 
 
   mapModePanel.setAttribute(
@@ -569,22 +649,14 @@ function openMapMode() {
   );
 
 
-  scrim.hidden =
-    false;
+  scrim.hidden = false;
 
 
-  setTimeout(
-    () => {
+  setTimeout(() => {
 
-      if (mapModeClose) {
+    mapModeClose.focus();
 
-        mapModeClose.focus();
-
-      }
-
-    },
-    50
-  );
+  }, 50);
 
 }
 
@@ -600,8 +672,7 @@ function closeMapMode() {
   }
 
 
-  mapModeActive =
-    false;
+  mapModeActive = false;
 
 
   page.classList.remove(
@@ -609,33 +680,23 @@ function closeMapMode() {
   );
 
 
-  if (mapModePanel) {
-
-    mapModePanel.hidden =
-      true;
-
-    mapModePanel.setAttribute(
-      "aria-hidden",
-      "true"
-    );
-
-  }
+  mapModePanel.hidden = true;
 
 
-  if (scrim) {
+  mapModePanel.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
-    scrim.hidden =
-      true;
 
-  }
+  scrim.hidden = true;
 
 
   clearMapSelection();
 
   removeZoom();
 
-  activeCategory =
-    null;
+  activeCategory = null;
 
 }
 
@@ -676,42 +737,37 @@ function clearMapSelection() {
 }
 
 
+/* =========================================================================
+   REMOVE ZOOM
+   ========================================================================= */
+
 function removeZoom() {
 
-  if (mapFrame) {
-
-    mapFrame.classList.remove(
-      "is-zoomed"
-    );
-
-    mapFrame.classList.remove(
-      "country-zoomed"
-    );
-
-  }
+  mapFrame.classList.remove(
+    "is-zoomed"
+  );
 
 
-  [
-    basisImg,
-    mapModeImage,
-    countryHitLayer,
-    ...Object.values(glowEls)
-  ]
-    .filter(Boolean)
-    .forEach(
-      el => {
+  basisImg.style.transform =
+    "";
 
-        el.style.transform =
-          "";
+  basisImg.style.transformOrigin =
+    "";
 
-        el.style.transformOrigin =
-          "";
 
-        el.style.transition =
-          "";
+  Object.values(
+    glowEls
+  ).forEach(
+    el => {
 
-      }
-    );
+      el.style.transform =
+        "";
+
+      el.style.transformOrigin =
+        "";
+
+    }
+  );
 
 }
 
@@ -725,7 +781,6 @@ function resetView() {
   if (mapModeActive) {
 
     closeMapMode();
-
     return;
 
   }
@@ -733,7 +788,6 @@ function resetView() {
 
   activeCategory =
     null;
-
 
   clearMapSelection();
 
@@ -751,11 +805,6 @@ function resetView() {
 function zoomToBbox(
   [x0, y0, x1, y1]
 ) {
-
-  if (!mapFrame) {
-    return;
-  }
-
 
   const cx =
     (x0 + x1) / 2;
@@ -804,138 +853,14 @@ function zoomToBbox(
   [
     basisImg,
     ...Object.values(glowEls)
-  ]
-    .filter(Boolean)
-    .forEach(
-      el => {
-
-        el.style.transformOrigin =
-          `${originX}% ${originY}%`;
-
-        el.style.transform =
-          `scale(${scale})`;
-
-      }
-    );
-
-}
-
-/* =========================================================================
-   COUNTRY ZOOM — MAP MODE
-   ========================================================================= */
-
-const COUNTRY_ZOOM_SCALE =
-  1.40;
-
-const COUNTRY_ZOOM_DURATION =
-  0.45;
-
-
-function zoomToCountry(
-  hit
-) {
-
-  if (
-    !mapFrame ||
-    !hit
-  ) {
-    return;
-  }
-
-
-  /*
-     Read the actual position
-     of the tapped country polygon.
-  */
-
-  const box =
-    hit.getBBox();
-
-
-  if (
-    !box ||
-    box.width <= 0 ||
-    box.height <= 0
-  ) {
-    return;
-  }
-
-
-  /*
-     Find the center of the
-     tapped country.
-  */
-
-  const centerX =
-    box.x +
-    box.width / 2;
-
-  const centerY =
-    box.y +
-    box.height / 2;
-
-
-  /*
-     Convert the SVG coordinates
-     into percentages.
-
-     The country SVG uses:
-
-     viewBox="0 0 2048 1447"
-  */
-
-  const originX =
-    (centerX / 2048) * 100;
-
-  const originY =
-    (centerY / 1447) * 100;
-
-
-  /*
-     Add the country-zoom state.
-  */
-
-  mapFrame.classList.add(
-    "is-zoomed"
-  );
-
-  mapFrame.classList.add(
-    "country-zoomed"
-  );
-
-
-  /*
-     These layers must move together
-     so the map and invisible click
-     areas stay perfectly aligned.
-  */
-
-  [
-  basisImg,
-  mapModeImage,
-  countryHitLayer,
-  ...Object.values(glowEls)
-]
-  .filter(Boolean)
-  .forEach(
+  ].forEach(
     el => {
 
       el.style.transformOrigin =
-        "50% 50%";
-
-      el.style.transition =
-        `transform ${COUNTRY_ZOOM_DURATION}s ease`;
-
-      const translateX =
-        (50 - originX) *
-        (COUNTRY_ZOOM_SCALE - 1);
-
-      const translateY =
-        (50 - originY) *
-        (COUNTRY_ZOOM_SCALE - 1);
+        `${originX}% ${originY}%`;
 
       el.style.transform =
-        `translate(${translateX}%, ${translateY}%) scale(${COUNTRY_ZOOM_SCALE})`;
+        `scale(${scale})`;
 
     }
   );
@@ -952,17 +877,6 @@ function openExplainer({
   color,
   text
 }) {
-
-  if (
-    !explainer ||
-    !explainerDot ||
-    !explainerTitle ||
-    !explainerBody ||
-    !scrim
-  ) {
-    return;
-  }
-
 
   explainerDot.style.background =
     color;
@@ -986,15 +900,16 @@ function openExplainer({
         "p"
       );
 
+
     p.textContent =
       text;
+
 
     explainerBody.appendChild(
       p
     );
 
   }
-
   else {
 
     const placeholder =
@@ -1002,8 +917,10 @@ function openExplainer({
         "div"
       );
 
+
     placeholder.className =
       "explainer-placeholder";
+
 
     explainerBody.appendChild(
       placeholder
@@ -1034,14 +951,6 @@ function openExplainer({
 
 function closeExplainer() {
 
-  if (
-    !scrim ||
-    !explainer
-  ) {
-    return;
-  }
-
-
   scrim.hidden =
     true;
 
@@ -1062,90 +971,73 @@ function closeExplainer() {
    X BUTTON — OLD CATEGORY POPUP
    ========================================================================= */
 
-if (explainerClose) {
+explainerClose.addEventListener(
+  "click",
+  function(e) {
 
-  explainerClose.addEventListener(
-    "click",
-    function(e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-      e.preventDefault();
-      e.stopPropagation();
+    resetView();
 
-      resetView();
-
-    }
-  );
-
-}
+  }
+);
 
 
 /* =========================================================================
    X BUTTON — MAP MODE
    ========================================================================= */
 
-if (mapModeClose) {
+mapModeClose.addEventListener(
+  "click",
+  function(e) {
 
-  mapModeClose.addEventListener(
-    "click",
-    function(e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-      e.preventDefault();
-      e.stopPropagation();
+    resetView();
 
-      resetView();
-
-    }
-  );
-
-}
+  }
+);
 
 
 /* =========================================================================
    RESET VIEW BUTTON — MAP MODE
    ========================================================================= */
 
-if (mapResetButton) {
+mapResetButton.addEventListener(
+  "click",
+  function(e) {
 
-  mapResetButton.addEventListener(
-    "click",
-    function(e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-      e.preventDefault();
-      e.stopPropagation();
+    resetView();
 
-      resetView();
-
-    }
-  );
-
-}
+  }
+);
 
 
 /* =========================================================================
    SCRIM
    ========================================================================= */
 
-if (scrim) {
+scrim.addEventListener(
+  "click",
+  function() {
 
-  scrim.addEventListener(
-    "click",
-    function() {
+    if (mapModeActive) {
 
-      if (mapModeActive) {
-
-        closeMapMode();
-
-        return;
-
-      }
-
-
-      resetView();
+      closeMapMode();
+      return;
 
     }
-  );
 
-}
+
+    resetView();
+
+  }
+);
 
 
 /* =========================================================================
@@ -1173,121 +1065,49 @@ document.addEventListener(
    ========================================================================= */
 
 const music =
-  document.getElementById(
-    "backgroundMusic"
-  );
+  document.getElementById("backgroundMusic");
+
 
 const musicToggle =
-  document.getElementById(
-    "musicToggle"
-  );
+  document.getElementById("musicToggle");
 
 
 function startBackgroundMusic() {
 
-  if (
-    !music ||
-    !musicToggle
-  ) {
-    return;
-  }
-
-
   if (music.paused) {
 
-    const playPromise =
-      music.play();
+    music.play();
 
-
-    if (
-      playPromise &&
-      typeof playPromise.catch === "function"
-    ) {
-
-      playPromise
-        .then(
-          () => {
-
-            musicToggle.textContent =
-              "🔊";
-
-          }
-        )
-        .catch(
-          () => {
-
-            /*
-               Browser may block
-               automatic playback.
-            */
-
-          }
-        );
-
-    }
+    musicToggle.textContent = "🔊";
 
   }
 
 }
 
 
-if (musicToggle) {
+musicToggle.addEventListener(
+  "click",
+  () => {
 
-  musicToggle.addEventListener(
-    "click",
-    () => {
+    if (music.paused) {
 
-      if (!music) {
-        return;
-      }
+      music.play();
 
-
-      if (music.paused) {
-
-        const playPromise =
-          music.play();
-
-
-        if (
-          playPromise &&
-          typeof playPromise.catch === "function"
-        ) {
-
-          playPromise
-            .then(
-              () => {
-
-                musicToggle.textContent =
-                  "🔊";
-
-              }
-            )
-            .catch(
-              () => {
-
-                musicToggle.textContent =
-                  "🔇";
-
-              }
-            );
-
-        }
-
-      }
-
-      else {
-
-        music.pause();
-
-        musicToggle.textContent =
-          "🔇";
-
-      }
+      musicToggle.textContent =
+        "🔊";
 
     }
-  );
+    else {
 
-}
+      music.pause();
+
+      musicToggle.textContent =
+        "🔇";
+
+    }
+
+  }
+);
 
 
 /* =========================================================================
@@ -1301,173 +1121,6 @@ const countryInformation = {
     flag: "🇩🇰",
     system: "Constitutional Monarchy",
     capital: "Copenhagen"
-  },
-  netherlands: {
-    name: "Netherlands",
-    flag: "🇳🇱",
-    system: "Constitutional Monarchy",
-    capital: "Amsterdam"
-  },
-
-  belgium: {
-    name: "Belgium",
-    flag: "🇧🇪",
-    system: "Constitutional Monarchy",
-    capital: "Brussels"
-  },
-
-  france: {
-    name: "France",
-    flag: "🇫🇷",
-    system: "Semi-Presidential Republic",
-    capital: "Paris"
-  },
-
-  turkey: {
-  name: "Turkey",
-  flag: "🇹🇷",
-  system: "Authoritarian/Hybrid Regime",
-  capital: "Ankara"
-},
-
-cyprus: {
-  name: "Cyprus",
-  flag: "🇨🇾",
-  system: "Parliamentary Republic",
-  capital: "Nicosia"
-},
-
-romania: {
-  name: "Romania",
-  flag: "🇷🇴",
-  system: "Presidential Republic",
-  capital: "Bucharest"
-},
-
-moldova: {
-  name: "Moldova",
-  flag: "🇲🇩",
-  system: "Authoritarian/Hybrid Regime",
-  capital: "Chișinău"
-},
-
-ukraine: {
-  name: "Ukraine",
-  flag: "🇺🇦",
-  system: "Authoritarian/Hybrid Regime",
-  capital: "Kyiv"
-},
-
-belarus: {
-  name: "Belarus",
-  flag: "🇧🇾",
-  system: "Authoritarian/Hybrid Regime",
-  capital: "Minsk"
-},
-
-russia: {
-  name: "Russia",
-  flag: "🇷🇺",
-  system: "Authoritarian/Hybrid Regime",
-  capital: "Moscow"
-},
-
-  switzerland: {
-    name: "Switzerland",
-    flag: "🇨🇭",
-    system: "Federal State (Direct Democracy)",
-    capital: "Bern"
-  },
-
-    germany: {
-    name: "Germany",
-    flag: "🇩🇪",
-    system: "Parliamentary Republic",
-    capital: "Berlin"
-  },
-
-  poland: {
-    name: "Poland",
-    flag: "🇵🇱",
-    system: "Parliamentary Republic",
-    capital: "Warsaw"
-  },
-
-  czechia: {
-    name: "Czechia",
-    flag: "🇨🇿",
-    system: "Parliamentary Republic",
-    capital: "Prague"
-  },
-
-  slovakia: {
-    name: "Slovakia",
-    flag: "🇸🇰",
-    system: "Parliamentary Republic",
-    capital: "Bratislava"
-  },
-
-  austria: {
-    name: "Austria",
-    flag: "🇦🇹",
-    system: "Parliamentary Republic",
-    capital: "Vienna"
-  },
-
-    italy: {
-    name: "Italy",
-    flag: "🇮🇹",
-    system: "Parliamentary Republic",
-    capital: "Rome"
-  },
-
-  hungary: {
-    name: "Hungary",
-    flag: "🇭🇺",
-    system: "Parliamentary Republic",
-    capital: "Budapest"
-  },
-
-  croatia: {
-    name: "Croatia",
-    flag: "🇭🇷",
-    system: "Parliamentary Republic",
-    capital: "Zagreb"
-  },
-
-  bosniaandherzegovina: {
-    name: "Bosnia & Herzegovina",
-    flag: "🇧🇦",
-    system: "Parliamentary Republic",
-    capital: "Sarajevo"
-  },
-
-    kosovo: {
-    name: "Kosovo",
-    flag: "🇽🇰",
-    system: "Parliamentary Republic",
-    capital: "Pristina"
-  },
-
-  albania: {
-    name: "Albania",
-    flag: "🇦🇱",
-    system: "Parliamentary Republic",
-    capital: "Tirana"
-  },
-
-  bulgaria: {
-    name: "Bulgaria",
-    flag: "🇧🇬",
-    system: "Parliamentary Republic",
-    capital: "Sofia"
-  },
-
-  greece: {
-    name: "Greece",
-    flag: "🇬🇷",
-    system: "Parliamentary Republic",
-    capital: "Athens"
   },
 
   estonia: {
@@ -1540,12 +1193,12 @@ russia: {
     capital: "Podgorica"
   },
 
-northmacedonia: {
-  name: "North Macedonia",
-  flag: "🇲🇰",
-  system: "Parliamentary Republic",
-  capital: "Skopje"
-},
+  northmacedonia: {
+    name: "North Macedonia",
+    flag: "🇲🇰",
+    system: "Parliamentary Republic",
+    capital: "Skopje"
+  },
 
   portugal: {
     name: "Portugal",
@@ -1561,12 +1214,12 @@ northmacedonia: {
     capital: "San Marino"
   },
 
-serbia: {
-  name: "Serbia",
-  flag: "🇷🇸",
-  system: "Parliamentary Republic",
-  capital: "Belgrade"
-},
+  serbia: {
+    name: "Serbia",
+    flag: "🇷🇸",
+    system: "Parliamentary Republic",
+    capital: "Belgrade"
+  },
 
   slovenia: {
     name: "Slovenia",
@@ -1589,8 +1242,6 @@ serbia: {
     capital: "Vatican City"
   }
 
-  
-
 };
 
 
@@ -1600,34 +1251,21 @@ serbia: {
 
 function showCountryInformation(key) {
 
-  const country =
-    countryInformation[key];
+  const country = countryInformation[key];
 
 
-  if (
-    !country ||
-    !mapModePanel
-  ) {
+  if (!country || !mapModePanel) {
     return;
   }
 
 
-  /*
-     Keep Map Mode open.
-  */
+  /* Keep Map Mode open */
 
-  mapModeActive =
-    true;
+  mapModeActive = true;
 
+  page.classList.add("map-mode-active");
 
-  page.classList.add(
-    "map-mode-active"
-  );
-
-
-  mapModePanel.hidden =
-    false;
-
+  mapModePanel.hidden = false;
 
   mapModePanel.setAttribute(
     "aria-hidden",
@@ -1635,14 +1273,10 @@ function showCountryInformation(key) {
   );
 
 
-  /*
-     Change title.
-  */
+  /* Change title */
 
   const panelTitle =
-    mapModePanel.querySelector(
-      "h2"
-    );
+    mapModePanel.querySelector("h2");
 
 
   if (panelTitle) {
@@ -1653,20 +1287,15 @@ function showCountryInformation(key) {
   }
 
 
-  /*
-     Change information.
-  */
+  /* Change information */
 
   const panelBody =
-    mapModePanel.querySelector(
-      ".map-mode-body"
-    );
+    mapModePanel.querySelector(".map-mode-body");
 
 
   if (panelBody) {
 
     panelBody.innerHTML = `
-
       <div class="map-mode-country-info">
 
         <div class="country-name-display">
@@ -1708,7 +1337,6 @@ function showCountryInformation(key) {
         </div>
 
       </div>
-
     `;
 
   }
@@ -1720,200 +1348,120 @@ function showCountryInformation(key) {
    COUNTRY CLICK EVENTS
    ========================================================================= */
 
-/*
-   This is now the ONLY country-click system.
-
-   There is no separate Iceland image
-   or Iceland canvas hit test anymore.
-
-   Iceland is treated exactly like
-   the other countries.
-*/
-
 if (countryHitLayer) {
 
   countryHitLayer
-    .querySelectorAll(
-      ".country-hit"
-    )
-    .forEach(
-      hit => {
+    .querySelectorAll(".country-hit")
+    .forEach(hit => {
 
-        hit.addEventListener(
-          "click",
-          function(e) {
+      hit.addEventListener(
+        "click",
+        function(e) {
 
-            e.preventDefault();
-            e.stopPropagation();
+          e.preventDefault();
+          e.stopPropagation();
 
 
-            /*
-               Country information is only
-               available while Map Mode is open.
-            */
-
-            if (!mapModeActive) {
-              return;
-            }
-
-
-           const countryKey =
-           hit.dataset.country;
-
-           if (!countryKey) {
-           return;
-           }
-
-           zoomToCountry(
-           hit
-           );
-
-           showCountryInformation(
-           countryKey
-           );
-
+          if (!mapModeActive) {
+            return;
           }
-        );
 
-      }
-    );
+
+          const countryKey =
+            hit.dataset.country;
+
+
+          showCountryInformation(
+            countryKey
+          );
+
+        }
+      );
+
+    });
 
 }
 
 
-/* =========================================================================
+/* =========================================================
    STARTUP INTRO
-   ========================================================================= */
+   ========================================================= */
 
-const startupIntro =
-  document.getElementById(
-    "startupIntro"
-  );
+const startupIntro = document.getElementById("startupIntro");
+const startupSkip = document.getElementById("startupSkip");
 
-const startupSkip =
-  document.getElementById(
-    "startupSkip"
-  );
-
-
-let startupFinished =
-  false;
-
+let startupFinished = false;
 
 function finishStartupIntro() {
 
-  if (
-    startupFinished ||
-    !startupIntro
-  ) {
-    return;
-  }
+  if (startupFinished || !startupIntro) return;
 
+  startupFinished = true;
 
-  startupFinished =
-    true;
+  startupIntro.classList.add("is-hidden");
 
+  setTimeout(() => {
 
-  startupIntro.classList.add(
-    "is-hidden"
-  );
+    if (startupIntro) {
+      startupIntro.remove();
+    }
 
-
-  setTimeout(
-    () => {
-
-      if (startupIntro) {
-
-        startupIntro.remove();
-
-      }
-
-    },
-    1000
-  );
+  }, 1000);
 
 }
 
 
-/* Automatically reveal the map
-   after the intro */
+/* Automatically reveal the map after the intro */
 
-window.addEventListener(
-  "load",
-  () => {
+window.addEventListener("load", () => {
 
-    setTimeout(
-      () => {
+  setTimeout(() => {
 
-        finishStartupIntro();
+    finishStartupIntro();
 
-      },
-      3200
-    );
+  }, 3200);
 
-  }
-);
+});
 
 
-/* Allow the visitor to skip
-   the intro */
+/* Allow the visitor to skip the intro */
 
 if (startupSkip) {
 
-  startupSkip.addEventListener(
-    "click",
-    (event) => {
+  startupSkip.addEventListener("click", (event) => {
 
-      event.stopPropagation();
+    event.stopPropagation();
 
-      finishStartupIntro();
+    finishStartupIntro();
 
-    }
-  );
+  });
 
 }
 
 
-/* Also allow tapping anywhere
-   on the intro to skip */
+/* Also allow tapping anywhere on the intro to skip */
 
 if (startupIntro) {
 
-  startupIntro.addEventListener(
-    "click",
-    (event) => {
+  startupIntro.addEventListener("click", (event) => {
 
-      if (
-        event.target ===
-        startupSkip
-      ) {
-        return;
-      }
+    if (event.target === startupSkip) return;
 
+    finishStartupIntro();
 
-      finishStartupIntro();
-
-    }
-  );
+  });
 
 }
 
 
-/* Allow ESC to skip
-   the startup */
+/* Allow ESC to skip the startup */
 
-document.addEventListener(
-  "keydown",
-  (event) => {
+document.addEventListener("keydown", (event) => {
 
-    if (
-      event.key === "Escape" &&
-      !startupFinished
-    ) {
+  if (event.key === "Escape" && !startupFinished) {
 
-      finishStartupIntro();
-
-    }
+    finishStartupIntro();
 
   }
-);
+
+});
