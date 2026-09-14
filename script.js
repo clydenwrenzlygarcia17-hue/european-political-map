@@ -7,7 +7,7 @@
    ========================================================================= */
 
 const explanations = {
-  header: "",
+  header: "This interactive map presents the different political systems of countries in Europe. It allows users to explore each country and view its government system and capital.",
   red: "",
   blue: "",
   yellow: "",
